@@ -395,6 +395,16 @@ HAVING
 	WHERE edh.EndDate IS NULL
 	GROUP BY d.DepartmentID) y)
 	
+--Solución B:
+	
+SELECT edh. DepartmentID , COUNT (*)
+FROM AdventureWorks2019.HumanResources.EmployeeDepartmentHistory edh 
+GROUP BY edh.DepartmentID 
+HAVING count () >= ALL (SELECT COUNT ()
+FROM AdventureWorks2019.HumanResources.EmployeeDepartmentHistory edh 
+GROUP BY edh.DepartmentID 
+)
+	
 --31. Hallar los empleados con menor antiguedad dentro de cada departamento
 	
 --Solución A:
@@ -479,5 +489,3 @@ WHERE
 	WHERE e.JobTitle = 'Sales Representative')
 ORDER BY 
 	p.LastName ASC
-
-
