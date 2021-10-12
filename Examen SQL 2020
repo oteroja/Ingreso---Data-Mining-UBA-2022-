@@ -1,7 +1,7 @@
 --Examen 2020
 
---a)	Hallar la descripción de las localidades donde viven afiliados mayores de 15 años 
---que durante el año 2019 hayan consumido el medicamento “CEFALEXINA”. (2 puntos)
+--a)	Hallar la descripciÃ³n de las localidades donde viven afiliados mayores de 15 aÃ±os 
+--que durante el aÃ±o 2019 hayan consumido el medicamento â€œCEFALEXINAâ€. (2 puntos)
 
 
 SELECT 
@@ -19,11 +19,11 @@ WHERE
 	AND ca.IdMedicamento = m.IdMedicamento
 	AND EDAD(a.FechaNacimiento) >= 15
 	AND m.NombreMedicamento = 'CEFALEXINA'
-	AND AÑO(ca.FechaHoraConsumo) = 2019
+	AND AÃ‘O(ca.FechaHoraConsumo) = 2019
 	
 
---b)	Indicar el nombre de los medicamentos de menor precio (o sea el precio más bajo) registrado en el 2020. 
---No es necesario que haya sido consumido por algún afiliado. (2 puntos)
+--b)	Indicar el nombre de los medicamentos de menor precio (o sea el precio mÃ¡s bajo) registrado en el 2020. 
+--No es necesario que haya sido consumido por algÃºn afiliado. (2 puntos)
 	
 SELECT
 	m.NombreMedicamento
@@ -33,15 +33,15 @@ FROM
 	
 WHERE 
 	m.IdMedicamento = pm.IdMedicamento
-	AND AÑO(pm.FechaPrecio) = 2020
+	AND AÃ‘O(pm.FechaPrecio) = 2020
 	AND pm.Precio = (SELECT MIN(pm.Precio)
 	FROM Precio-Medicamento pm
-	WHERE AÑO(pm.FechaPrecio) = 2020)
+	WHERE AÃ‘O(pm.FechaPrecio) = 2020)
 	
---c) Indicar el nombre de las farmacias que hayan vendido algún medicamento y que sean las de menor antigüedad 
+--c) Indicar el nombre de las farmacias que hayan vendido algÃºn medicamento y que sean las de menor antigÃ¼edad 
 --(respecto a su fecha de apertura), dentro de las farmacias que pertenecen a su misma localidad. (2.5 puntos)
 	
-SELECT 
+SELECT
 	f.NombreFarmacia
 
 FROM
@@ -51,13 +51,13 @@ WHERE
 	f.IdFarmacia = ca.IdFarmacia
 	AND ca.CantidadConsumida IS NOT NULL
 	AND ca.CantidadConsumida <> 0
-	AND f.FechaApertura IN (SELECT 
-	MAX(f.FechaApertura)
-	FROM Farmacia f
-	GROUP BY f.IdLocalidad)
+	AND f.FechaApertura = (SELECT 
+	MAX(f2.FechaApertura)
+	FROM Farmacia f2
+	WHERE f.IdLocalidad = f2.IdLocalidad)
 	
 --d)	Hallar la menor cantidad de monodroga de cada medicamento dado de alta en el 2017, 
---para aquellos medicamentos con menos de 3 monodrogas en su composición.  (2.5 puntos)
+--para aquellos medicamentos con menos de 3 monodrogas en su composiciÃ³n.  (2.5 puntos)
 	
 SELECT
 	cm.IdMedicamento, MIN(cm.CantidadMonodroga)
@@ -67,12 +67,14 @@ FROM
 
 WHERE
 	cm.IdMedicamento = m.IdMedicamento
-	AND AÑO(m.FechaAlta) = 2017
+	AND AÃ‘O(m.FechaAlta) = 2017
 	
 GROUP BY
 	m.IdMedicamento
 
 HAVING 
-	COUNT(cm.CantidadMonodroga) < 3
+	3 < (SELECT COUNT(*)
+	FROM Composiciones-Medicamento cm2
+	cm2.IdMedicamento = cm.IdMedicamento)
 	
 	
