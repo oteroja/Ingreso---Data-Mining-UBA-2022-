@@ -1,7 +1,7 @@
 --Examen 2018
 
--- 1) Los códigos de los componentes de los alimentos consumidos durante el 2018, por
---usuarios varones mayores de 50 años. (2 puntos)
+-- 1) Los cÃ³digos de los componentes de los alimentos consumidos durante el 2018, por
+--usuarios varones mayores de 50 aÃ±os. (2 puntos)
 
 SELECT
 	c.Codigo_Componente
@@ -16,12 +16,12 @@ WHERE
 	c.CodigoComponente = ca.CodigoComponente
 	AND ca.Codigo_Alimento = cu.CodigoAlimento
 	AND u.Id_Usuario = cu.Id_Usuario
-	AND AÑO(cu.Fecha/Hora) = 2018
+	AND AÃ‘O(cu.Fecha/Hora) = 2018
 	AND EDAD(u.Fecha_Nacimiento) > 50
 	AND u.Sexo = 'Varon'
 
---2. Las descripciones de los alimentos que hayan sido consumidos y que tengan mínima
---cantidad del componente cuyo código es “SODIO”. (2 puntos)
+--2. Las descripciones de los alimentos que hayan sido consumidos y que tengan mÃ­nima
+--cantidad del componente cuyo cÃ³digo es â€œSODIOâ€. (2 puntos)
 	
 SELECT
 	a.Codigo_Alimento, a.Descripcion
@@ -41,11 +41,11 @@ WHERE
 	FROM Composicion_Alimento ca
 	WHERE ca.Codigo_Componente = 'SODIO')
 	
---3. Para el alimento cuyo código es “FRANUI”, dar la cantidad de consumos por año, para
---aquellos años con más de 3000 consumos. (2.5 puntos)
+--3. Para el alimento cuyo cÃ³digo es â€œFRANUIâ€, dar la cantidad de consumos por aÃ±o, para
+--aquellos aÃ±os con mÃ¡s de 3000 consumos. (2.5 puntos)
 	
 SELECT 
-	AÑO(cu.Fecha/Hora), COUNT(*)
+	AÃ‘O(cu.Fecha/Hora), COUNT(*)
 
 FROM
 	Consumo_Usuario cu
@@ -54,11 +54,10 @@ WHERE
 	cu.Codigo_Alimento = 'FRANUI'
 
 GROUP BY
-	AÑO(cu.Fecha/Hora)
+	AÃ‘O(cu.Fecha/Hora)
 	
-HAVING 
+HAVING
 	COUNT(*) > 3000
-	
 
 --4. Los componentes de menor Cant_x_porcion dentro de los componentes que componen
 --cada alimento (2.5 puntos)
@@ -72,8 +71,8 @@ FROM
 	
 WHERE
 	c.Codigo_Componente = ca.Codigo_Componente
-	ca.Cant_x_Porcion IN (SELECT MIN(ca.Cant_x_Porcion)
-	FROM Composicion_Alimento ca
-	GROUP BY ca.Codigo_Alimento)
+	ca.Cant_x_Porcion = (SELECT MIN(ca2.Cant_x_Porcion)
+	FROM Composicion_Alimento ca2
+	ca.Codigo_Alimento = ca2.Codigo_Alimento)
 
 	
