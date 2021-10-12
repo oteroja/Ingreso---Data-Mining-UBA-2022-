@@ -1,0 +1,78 @@
+/*1. Las denominaciones de los aviones de mayor capacidad entre los que pasaron por el
+aeropuerto cuyo código es EZEIZA durante el año 2015. (2)*/
+
+SELECT DISTINCT
+	a.Denominacion
+
+FROM
+	Aviones av,
+	Vuelos vu,
+	Pistas p,
+	Aeropuertos ae
+	
+WHERE
+	av.Codigo_Avion = vu.Codigo_Avion
+	AND vu.IdPista = p.IdPista
+	AND p.Codigo_Aeropuerto = ae.Codigo_Aeropuerto
+	AND ae.Denominacion_Aeropuerto = 'EZEIZA'
+	AND YEAR(vu.Fecha) = 2015
+	AND av.Capacidad = (SELECT MAX(av.Capacidad)
+	FROM Aviones av, Vuelos vu, Pistas p, Aeropuertos ae
+	WHERE av.Codigo_Avion = vu.Codigo_Avion
+	AND vu.IdPista = p.IdPista AND p.Codigo_Aeropuerto = ae.Codigo_Aeropuerto
+	AND ae.Denominacion_Aeropuerto = 'EZEIZA' AND YEAR(vu.Fecha) = 2015)
+	
+
+
+/*2. Para el aeropuerto cuyo código es CALAFATE, dar la cantidad de pasajeros de cada
+vuelo para aquellos vuelos con más de 50 pasajeros. (2.5)*/
+	
+SELECT
+	vp.Id_Vuelo, COUNT(*)
+FROM
+	Viajes_Pasajeros vp
+	Vuelos vu,
+	Pistas p,
+WHERE
+	vp.Id_Vuelo = vu.Id_Vuelo
+	AND vu.Id_Pista = p.Id_Pista
+	AND p.Codigo_Aeropuertos = 'CALAFATE'
+GROUP BY
+	vp.Id_Vuelo
+HAVING
+	COUNT(*) > 50
+	
+	
+/*3. El nombre y apellido de los pasajeros mayores de 55 años que hayan viajado en vuelos
+que partieron del aeropuerto cuyo código es EZEIZA durante el 2017 (2 puntos)*/
+	
+SELECT DISTINCT
+	pa.Nombre_Y_Apellido
+FROM
+	Pasajeros pa,
+	Viajes_Pasajeros vp,
+	Vuelos vu,
+	Pistas pi
+WHERE
+	pa.Tipo_Documento = vp.Tipo_Documento
+	AND pa.Nro_Documento = vp.Nro_Documento
+	AND vp.Id_vuelo = vu.Id_vuelo
+	AND vu.Id_Pista = pi.Id_Pista
+	AND EDAD(pa.Fecha_Nacimiento) >= 55
+	AND pi.Codigo_Aeropuerto = 'EZEIZA'
+	AND YEAR(vu.Fecha) = 2017
+	
+
+
+--4. Las pistas de mayor longitud dentro 
+--de las pistas de cada aeropuerto (2.5 puntos)
+	
+SELECT
+	pi.Id_Pista
+FROM
+	Pistas pi
+WHERE
+	pi.Longitud = (SELECT MAX (pi2.Longitud)
+	FROM Pistas pi2
+	WHERE pi.Codigo_Aeropuerto = pi2.Codigo_Aeropuerto)
+	
