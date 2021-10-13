@@ -4,8 +4,8 @@
 --que durante el año 2019 hayan consumido el medicamento “CEFALEXINA”. (2 puntos)
 
 
-SELECT 
-	l.IdLocalidad, l.DescripcionLocalidad
+SELECT DISTINCT
+	l.DescripcionLocalidad
 
 FROM 
 	Localidad l,
