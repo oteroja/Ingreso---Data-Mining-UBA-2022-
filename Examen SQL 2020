@@ -73,8 +73,6 @@ GROUP BY
 	m.IdMedicamento
 
 HAVING 
-	3 < (SELECT COUNT(*)
-	FROM Composiciones-Medicamento cm2
-	cm2.IdMedicamento = cm.IdMedicamento)
+	COUNT(*) > 3
 	
 	
