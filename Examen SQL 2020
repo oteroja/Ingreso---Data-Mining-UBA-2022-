@@ -25,7 +25,7 @@ WHERE
 --b)	Indicar el nombre de los medicamentos de menor precio (o sea el precio más bajo) registrado en el 2020. 
 --No es necesario que haya sido consumido por algún afiliado. (2 puntos)
 	
-SELECT
+SELECT DISTINCT
 	m.NombreMedicamento
 	
 FROM
@@ -41,7 +41,7 @@ WHERE
 --c) Indicar el nombre de las farmacias que hayan vendido algún medicamento y que sean las de menor antigüedad 
 --(respecto a su fecha de apertura), dentro de las farmacias que pertenecen a su misma localidad. (2.5 puntos)
 	
-SELECT
+SELECT DISTINCT
 	f.NombreFarmacia
 
 FROM
