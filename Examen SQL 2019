@@ -1,0 +1,70 @@
+--Examen 2019 SQL
+
+--1) Los códigos de alimentos que fueron consumidos durante el 2018 por usuarios cuyo rango de altura se encuentre
+-- entre 1.75 metros y 2 metros
+
+SELECT DISTINCT
+	cu.Codigo_Alimento,
+
+FROM
+	Consumo_Usuario cu,
+	Usuarios u,
+	Perfil_Consumidor pc
+
+WHERE
+	cu.Id_Usuario = u.Id_Usuario
+	AND u.Id_Perfil_Consumidor = pc.Id_Perfil_Consumidor
+	AND AÑO(cu.Fecha/Hora) = 2018
+	AND pc.Altura_Desde >= 1.75
+	AND pc.Altura_Hast <= 2
+
+--2)Los nombres de los usuarios que hayan consumido durante el año 2018 y cuyo perfil de consumidor asociado
+-- tenga altura mínima
+	
+SELECT
+	u.Nombre
+
+FROM
+	Usuario u,
+	Consumo_Usuario cu,
+	Perfil_Consumidor pc
+
+WHERE
+	u.Id_Usuario = cu.Id_Usuario
+	AND u.Id_Perfil_Consumior = pc.Id_Perfil_Consumidor
+	AND AÑO(cu.Fecha/Hora) = 2018
+	AND pc.Altura_Desde = (SELECT MIN(pc2.Altura_Desde)
+	FROM Perfil_Consumidor pc2)
+	
+--3) Dar los nombres de los usuarios cuyo peso sea igual al máximo peso registrado para su perfil de consumidor
+
+SELECT
+	u.Nombre
+
+FROM
+	Usuario u,
+	Perfil_Consumidor pc
+
+WHERE
+	u.Id_Perfil_Consumidor = pc.Id_Perfil_Consumidor
+	AND u.Peso = (SELECT MAX(u2.Peso)
+	FROM Usuario u2
+	WHERE u.Id_Perfil_Consumidor = u2.Id_Perfil_Consumidor)
+
+--4) Para cada perfil de usuario, dar la cantidad de usuarios asociados a cada perfil que
+-- hayan nacido en el año 2000, para aquellos perfiles con más de 100 usuarios
+
+SELECT
+	u.Id_Perfil_Consumidor, COUNT(*)
+	
+FROM
+	Usuario u
+
+WHERE
+	AÑO(Fecha_Nacimiento) = 2000
+
+GROUP BY
+	u.Id_Perfil_Consumidor
+
+HAVING
+	 COUNT(*) > 100
